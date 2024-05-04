@@ -1,93 +1,56 @@
-# FLAME2Graph
+# FLAMES2Graph: An Interpretable Federated Multivariate Time Series Classification Framework
+Raneen Younis, Zahra Ahmadi, Abdul Hakmeh, Marco Fisichella
 
+{younis,ahmadi,mfisichella@l3s.de}
+![Capture](https://github.com/anonymousger/FLAME2Graph/assets/85762194/33062fbc-5dbe-4b75-8aae-5f22bae06572)
 
+Increasing privacy concerns have led to decentralized and federated machine learning techniques that allow individual clients to consult and train models collaboratively without sharing private information. Some of these applications, such as medical and healthcare, require the final decisions to be interpretable. One common form of data in these applications is multivariate time series, where deep neural networks, especially convolutional neural networks based approaches, have established excellent performance in their classification tasks. However, promising results and performance of deep learning models are a black box, and their decisions cannot always be guaranteed and trusted. While several approaches address the interpretability of deep learning models for multivariate time series data in a centralized environment, less effort has been made in a federated setting. In this work, we introduce FLAMES2Graph, a new horizontal federated learning framework designed to interpret the deep learning decisions of each client. FLAMES2Graph extracts and visualizes those input subsequences that are highly activated by a convolutional neural network. Besides, an evolution graph is created to capture the temporal dependencies between the extracted distinct subsequences. 
+The federated learning clients only share this temporal evolution graph with the centralized server instead of trained model weights to create a global evolution graph. 
+Our extensive experiments on various datasets from well-known multivariate benchmarks indicate that the FLAMES2Graph framework significantly outperforms other state-of-the-art federated methods while keeping privacy and augmenting network decision interpretation. 
 
-## Getting started
+## The data used in this project:
+ * The Baydogan’s archive, contains 13 multivariate time series classification datasets. In this work, we choose five datasets from this archive (UWave, ECG, AUSLAN, NetFlow, and Wafer).
+ * Human Activity Recognition (HAR) dataset recorded daily activities from 30 volunteers and produced six different labels of these activities (walking, walking upstairs, walking downstairs, standing, sitting, and lying).
+ * PAMAP2 Physical Activity Monitoring (PAM) dataset recorded 18 different daily activities using 17 sensors. 
 
-To make it easy for you to get started with GitLab, here's a list of recommended next steps.
+## Prerequisites
+In order to simulate federated learning as it occurs in a real-world scenario, we employ [NVIDIA FLARE](https://nvflare.readthedocs.io/en/main/flare_overview.html). We set up a server with four clients for each experiment. 
 
-Already a pro? Just edit this README.md and make it your own. Want to make it easy? [Use the template at the bottom](#editing-this-readme)!
+The python packages needed are:
+* numpy
+* pandas
+* sklearn
+* scipy
+* matplotlib
+* tensorflow
+* keras
 
-## Add your files
+## Additional qualitative examples of the extracted subsequences and evolution graphs
 
-- [ ] [Create](https://docs.gitlab.com/ee/user/project/repository/web_editor.html#create-a-file) or [upload](https://docs.gitlab.com/ee/user/project/repository/web_editor.html#upload-a-file) files
-- [ ] [Add files using the command line](https://docs.gitlab.com/ee/gitlab-basics/add-file.html#add-a-file-using-the-command-line) or push an existing Git repository with the following command:
+In the following examples, we demonstrate additional cases by taking a closer look at the interpretability and effectiveness of our proposed FLAMES2Graph framework for the ECG (2-dimensional) and UWave (3-dimensional) datasets.
 
+## ECG dataset
+
+![Capture](https://user-images.githubusercontent.com/85762194/231527935-e88d8072-b305-42c5-8eac-bd30f5c04864.PNG)
+
+This example demonstrates the MHAP evolution graph for ECG data and the temporal transitions for a Class 1 data set sample. The framework identifies the important subsequences of the multivariate time series data and represents the temporal transition through the MHAP evolution graph. Figure (a) shows the three MHAPs extracted from the class 1 sample that serve as nodes in the graph shown in (b). The transitions between the nodes show the order of occurrence of the MHAPs in the input data. To understand the decision of the network in classifying time series, our framework relies on the important subsequences of the input data (MHAPs) and their temporal order, which is crucial. For instance, when interpreting ECG data, a physician needs to examine the data in a specific temporal sequence to determine whether the patient's ECG recording is normal or has pathological problems.
+
+## UWave dataset
+
+![Capture1](https://user-images.githubusercontent.com/85762194/231794593-57c17149-7a70-428a-a06d-8325b69dfbb7.PNG)
+
+Our framework is tested on two samples from the UWave dataset, as shown in this example. The first sample (a) includes three representative patterns (nodes 1, 2, and 3) that were learned from the network, while the second sample (b) consists of representative MHAP nodes 4, 5, and 2. The graph represents the relationship between these nodes based on their temporal occurrence order in (c). Notably, node 2 is present in both samples, but its temporal order is different in the two classes. Our graph representation plays a crucial role in identifying the representative patterns and their chronological order, aiding the classifier in making a specific decision.
+
+As we analyze sample (a), it becomes apparent that the first output class label is activated in both the x and y-axis signals of the UWave dataset. This label corresponds to a gesture pattern that starts at a specific point, moves upwards, towards the left, and finally downwards, as shown by the 'output label shape' in (a). Although this information provides insight into the pattern recognition process, a domain knowledge expert can provide a more nuanced interpretation of the outputs. Our framework is designed to help the user visualize the significant input subsequences that contribute to a specific decision, thereby facilitating precise interpretation by domain experts.
+
+## Reference
+If you re-use this work, please cite:
 ```
-cd existing_repo
-git remote add origin https://git.l3s.uni-hannover.de/multivariate-time-series-classification/FLAME2Graph.git
-git branch -M main
-git push -uf origin main
+@inproceedings{younis2023flames2graph,
+  title={FLAMES2Graph: An Interpretable Federated Multivariate Time Series Classification Framework},
+  author={Younis, Raneen and Ahmadi, Zahra and Hakmeh, Abdul and Fisichella, Marco},
+  booktitle={Proceedings of the 29th ACM SIGKDD Conference on Knowledge Discovery and Data Mining},
+  pages={3140--3150},
+  year={2023}
+}
 ```
-
-## Integrate with your tools
-
-- [ ] [Set up project integrations](https://git.l3s.uni-hannover.de/multivariate-time-series-classification/FLAME2Graph/-/settings/integrations)
-
-## Collaborate with your team
-
-- [ ] [Invite team members and collaborators](https://docs.gitlab.com/ee/user/project/members/)
-- [ ] [Create a new merge request](https://docs.gitlab.com/ee/user/project/merge_requests/creating_merge_requests.html)
-- [ ] [Automatically close issues from merge requests](https://docs.gitlab.com/ee/user/project/issues/managing_issues.html#closing-issues-automatically)
-- [ ] [Enable merge request approvals](https://docs.gitlab.com/ee/user/project/merge_requests/approvals/)
-- [ ] [Set auto-merge](https://docs.gitlab.com/ee/user/project/merge_requests/merge_when_pipeline_succeeds.html)
-
-## Test and Deploy
-
-Use the built-in continuous integration in GitLab.
-
-- [ ] [Get started with GitLab CI/CD](https://docs.gitlab.com/ee/ci/quick_start/index.html)
-- [ ] [Analyze your code for known vulnerabilities with Static Application Security Testing (SAST)](https://docs.gitlab.com/ee/user/application_security/sast/)
-- [ ] [Deploy to Kubernetes, Amazon EC2, or Amazon ECS using Auto Deploy](https://docs.gitlab.com/ee/topics/autodevops/requirements.html)
-- [ ] [Use pull-based deployments for improved Kubernetes management](https://docs.gitlab.com/ee/user/clusters/agent/)
-- [ ] [Set up protected environments](https://docs.gitlab.com/ee/ci/environments/protected_environments.html)
-
-***
-
-# Editing this README
-
-When you're ready to make this README your own, just edit this file and use the handy template below (or feel free to structure it however you want - this is just a starting point!). Thanks to [makeareadme.com](https://www.makeareadme.com/) for this template.
-
-## Suggestions for a good README
-
-Every project is different, so consider which of these sections apply to yours. The sections used in the template are suggestions for most open source projects. Also keep in mind that while a README can be too long and detailed, too long is better than too short. If you think your README is too long, consider utilizing another form of documentation rather than cutting out information.
-
-## Name
-Choose a self-explaining name for your project.
-
-## Description
-Let people know what your project can do specifically. Provide context and add a link to any reference visitors might be unfamiliar with. A list of Features or a Background subsection can also be added here. If there are alternatives to your project, this is a good place to list differentiating factors.
-
-## Badges
-On some READMEs, you may see small images that convey metadata, such as whether or not all the tests are passing for the project. You can use Shields to add some to your README. Many services also have instructions for adding a badge.
-
-## Visuals
-Depending on what you are making, it can be a good idea to include screenshots or even a video (you'll frequently see GIFs rather than actual videos). Tools like ttygif can help, but check out Asciinema for a more sophisticated method.
-
-## Installation
-Within a particular ecosystem, there may be a common way of installing things, such as using Yarn, NuGet, or Homebrew. However, consider the possibility that whoever is reading your README is a novice and would like more guidance. Listing specific steps helps remove ambiguity and gets people to using your project as quickly as possible. If it only runs in a specific context like a particular programming language version or operating system or has dependencies that have to be installed manually, also add a Requirements subsection.
-
-## Usage
-Use examples liberally, and show the expected output if you can. It's helpful to have inline the smallest example of usage that you can demonstrate, while providing links to more sophisticated examples if they are too long to reasonably include in the README.
-
-## Support
-Tell people where they can go to for help. It can be any combination of an issue tracker, a chat room, an email address, etc.
-
-## Roadmap
-If you have ideas for releases in the future, it is a good idea to list them in the README.
-
-## Contributing
-State if you are open to contributions and what your requirements are for accepting them.
-
-For people who want to make changes to your project, it's helpful to have some documentation on how to get started. Perhaps there is a script that they should run or some environment variables that they need to set. Make these steps explicit. These instructions could also be useful to your future self.
-
-You can also document commands to lint the code or run tests. These steps help to ensure high code quality and reduce the likelihood that the changes inadvertently break something. Having instructions for running tests is especially helpful if it requires external setup, such as starting a Selenium server for testing in a browser.
-
-## Authors and acknowledgment
-Show your appreciation to those who have contributed to the project.
-
-## License
-For open source projects, say how it is licensed.
-
-## Project status
-If you have run out of energy or time for your project, put a note at the top of the README saying that development has slowed down or stopped completely. Someone may choose to fork your project or volunteer to step in as a maintainer or owner, allowing your project to keep going. You can also make an explicit request for maintainers.
